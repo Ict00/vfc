@@ -8,9 +8,9 @@ mut:
 	tui &tui.Context = unsafe { nil }
 pub mut:
 	selection        Selection     = NoSelection{}
-	action_list      []string      = []string{}
+	action_list      []Entry       = []Entry{}
 	filter           CollectFilter = CollectFilter{}
-	entries          []string      = []string{}
+	entries          []Entry       = []Entry{}
 	current_dir      string        = '/'
 	cursor_index     int
 	page             int
@@ -41,7 +41,7 @@ fn frame(x voidptr) {
 		}
 
 		entry := app.entries[i]
-		entry_basename := os.base(entry)
+		entry_basename := app.entries[i].base
 
 		draw_prefix(mut app, entry, i, b)
 		if entry_basename.len < max_characters {

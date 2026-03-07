@@ -31,8 +31,8 @@ pub fn move_down(mut app App) {
 pub fn go_next_dir(mut app App) {
 	selected_dir := app.entries[app.cursor_index]
 
-	if os.is_dir(selected_dir) {
-		update(mut app, selected_dir)
+	if selected_dir.is_dir {
+		update(mut app, selected_dir.path)
 	}
 }
 
@@ -57,15 +57,15 @@ pub fn move(mut app App) {
 		return
 	}
 
-	new_path := os.norm_path(app.entries[app.cursor_index])
-	if !os.is_dir(new_path) {
+	new_path := app.entries[app.cursor_index].path
+	if !app.entries[app.cursor_index].is_dir {
 		return
 	}
 
 	for i in app.action_list {
-		base := os.base(i)
+		base := i.base
 		dest := os.join_path(new_path, base)
-		os.mv(i, dest) or {}
+		os.mv(i.path, dest) or {}
 	}
 
 	clear_action_list(mut app)
@@ -75,7 +75,7 @@ pub fn move(mut app App) {
 pub fn mass_select(mut app App) {
 	expr := get_input(mut app, '')
 	for i in app.entries {
-		if matches(expr, os.base(i)) {
+		if matches(expr, i.base) {
 			if i !in app.action_list {
 				app.action_list << i
 			}
@@ -88,16 +88,16 @@ pub fn copy_cmd(mut app App) {
 		return
 	}
 
-	new_path := os.norm_path(app.entries[app.cursor_index])
-	if !os.is_dir(new_path) {
+	new_path := app.entries[app.cursor_index].path
+	if !app.entries[app.cursor_index].is_dir {
 		return
 	}
 
 	for i in app.action_list {
-		if os.is_file(i) {
-			os.cp(i, new_path, os.CopyParams{}) or {}
+		if !i.is_dir {
+			os.cp(i.path, new_path, os.CopyParams{}) or {}
 		} else {
-			os.cp_all(i, os.join_path(new_path, os.base(i)), true) or {}
+			os.cp_all(i.path, os.join_path(new_path, i.base), true) or {}
 		}
 	}
 
@@ -113,7 +113,7 @@ pub fn rename(mut app App) {
 	new_name := get_input(mut app, 'New name: ')
 
 	if app.action_list.len == 1 {
-		old_path := app.action_list[0]
+		old_path := app.action_list[0].path
 		new_path := os.join_path(os.dir(old_path), new_name)
 		os.mv(old_path, new_path) or {}
 		clear_action_list(mut app)
@@ -127,8 +127,8 @@ pub fn rename(mut app App) {
 		}
 		mut b := 1
 		for i in app.action_list {
-			new_path := os.join_path(os.dir(i), '${name}${b}.${extension}')
-			os.mv(i, new_path) or {}
+			new_path := os.join_path(os.dir(i.path), '${name}${b}.${extension}')
+			os.mv(i.path, new_path) or {}
 			b++
 		}
 		clear_action_list(mut app)
@@ -137,13 +137,13 @@ pub fn rename(mut app App) {
 }
 
 pub fn add_current(mut app App) {
-	x := os.norm_path(app.entries[app.cursor_index])
+	x := app.entries[app.cursor_index]
 	if x in app.action_list {
-		app.action_list = app.action_list.filter(fn [x] (it string) bool {
-			return it != x
+		app.action_list = app.action_list.filter(fn [x] (it Entry) bool {
+			return it.path != x.path
 		})
 	} else {
-		app.action_list << x
+		app.action_list << app.entries[app.cursor_index]
 	}
 }
 
@@ -157,9 +157,8 @@ pub fn end_range(mut app App) {
 		}
 
 		for i in ranges.get_selected_entries(app.entries) {
-			x := os.norm_path(i)
-			if x !in app.action_list {
-				app.action_list << x
+			if i !in app.action_list {
+				app.action_list << i
 			}
 		}
 	}
@@ -206,10 +205,10 @@ pub fn remove(mut app App) {
 	answer := get_input(mut app, 'Are you sure? (yes/no) ')
 	if answer == 'yes' {
 		for i in app.action_list {
-			if os.is_dir(i) {
-				os.rmdir_all(i) or {}
+			if i.is_dir {
+				os.rmdir_all(i.path) or {}
 			} else {
-				os.rm(i) or {}
+				os.rm(i.path) or {}
 			}
 		}
 		clear_action_list(mut app)

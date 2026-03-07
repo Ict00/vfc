@@ -3,7 +3,7 @@ module main
 import os
 import term.ui as tui
 
-pub fn draw_prefix(mut app App, entry string, current_index int, b int) {
+pub fn draw_prefix(mut app App, entry Entry, current_index int, b int) {
 	app.tui.set_bg_color(tui.Color{255, 255, 255})
 	app.tui.set_color(tui.Color{0, 0, 0})
 
@@ -38,13 +38,13 @@ pub fn draw_prefix(mut app App, entry string, current_index int, b int) {
 	app.tui.reset_color()
 }
 
-pub fn draw_postfix(mut app App, entry string, draw_index int) {
+pub fn draw_postfix(mut app App, entry Entry, draw_index int) {
 	start := (app.tui.window_width - 1) - 2
-	if os.is_dir(entry) {
+	if entry.is_dir {
 		app.tui.set_bg_color(tui.Color{66, 206, 245})
-	} else if os.is_link(entry) {
+	} else if entry.is_link {
 		app.tui.set_bg_color(tui.Color{43, 55, 227})
-	} else if os.is_executable(entry) {
+	} else if entry.is_executable {
 		app.tui.set_bg_color(tui.Color{76, 242, 61})
 	} else {
 		app.tui.set_bg_color(tui.Color{245, 179, 66})

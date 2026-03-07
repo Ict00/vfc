@@ -9,24 +9,22 @@ pub mut:
 	hide_dirs   bool
 }
 
-pub fn sort(mut entries []string) {
-	entries.sort(a < b)
-	entries.insert(0, '..')
-	entries.insert(0, '.')
+pub fn sort(mut entries []Entry) {
+	entries.sort(a.path < b.path)
+	entries.insert(0, entry('..'))
+	entries.insert(0, entry('.'))
 }
 
-pub fn collect(path string, filter CollectFilter) []string {
-	mut result := []string{}
+pub fn collect(path string, filter CollectFilter) []Entry {
+	mut result := []Entry{}
 
 	for str in os.ls(path) or { [] } {
-		if str == '.' || str == '..' {
-			result << str
-		} else if filter.hide_hidden && str.starts_with('.') {
+		if filter.hide_hidden && str.starts_with('.') {
 			// Skip
 		} else if os.is_dir(str) && !filter.hide_dirs {
-			result << os.abs_path(str)
+			result << entry(os.abs_path(str))
 		} else if os.is_file(str) && !filter.hide_files {
-			result << os.abs_path(str)
+			result << entry(os.abs_path(str))
 		}
 	}
 
