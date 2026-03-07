@@ -61,7 +61,7 @@ You may notice that on the right side of the screen there are some colors. They 
 | Color           | Type       |
 |-----------------|------------|
 | Yellow          | File       |
-| Cyan/Light blue | Directory  |
+| Light blue      | Directory  |
 | Blue            | Symlink    |
 | Green           | Executable |
 
