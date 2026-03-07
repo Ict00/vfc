@@ -9,6 +9,7 @@ mut:
 pub mut:
 	selection        Selection      = NoSelection{}
 	action_list      []Entry        = []Entry{}
+	bookmarks        []Entry        = []Entry{}
 	filter           CollectFilter  = CollectFilter{}
 	entries          []Entry        = []Entry{}
 	ctx              ControlContext = MainContext{}
@@ -20,6 +21,22 @@ pub mut:
 
 fn input(e &tui.Event, x voidptr) {
 	mut app := unsafe { &App(x) }
+
+	match e.code {
+		.f1 {
+			app.ctx = MainContext{}
+		}
+		.f2 {
+			app.ctx = BookmarkContext{}
+		}
+		.q {
+			exit(0)
+		}
+		.escape {
+			exit(0)
+		}
+		else {}
+	}
 
 	app.ctx.input(e, mut app)
 }

@@ -47,16 +47,13 @@ pub fn (c MainContext) frame(mut app App) {
 	app.tui.flush()
 }
 
-pub fn (c MainContext) input(e &tui.Event, mut app App) {
+pub fn (mut c MainContext) input(e &tui.Event, mut app App) {
 	if app.requesting_input {
 		return
 	}
 
 	if e.typ == .key_down {
 		match e.code {
-			.q {
-				exit(0)
-			}
 			.r {
 				remove(mut app)
 			}
@@ -64,7 +61,7 @@ pub fn (c MainContext) input(e &tui.Event, mut app App) {
 				change_filter(mut app)
 			}
 			.semicolon {
-				process(mut app, false)
+				process(mut app)
 			}
 			.c {
 				copy_cmd(mut app)
@@ -77,6 +74,9 @@ pub fn (c MainContext) input(e &tui.Event, mut app App) {
 			}
 			.e {
 				move_to(mut app)
+			}
+			.b {
+				add_current_to_bookmarks(mut app)
 			}
 			.f {
 				filter_search(mut app)

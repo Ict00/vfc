@@ -40,16 +40,19 @@ pub fn go_back(mut app App) {
 	update(mut app, '..')
 }
 
-pub fn process(mut app App, has_output bool) {
+pub fn process(mut app App) {
 	command := get_input(mut app, '> ')
-
-	if has_output {
-		// TODO: Implement later (with Contexts)
-	}
 
 	mut x := os.start_new_command(command) or { os.Command{} }
 	x.close() or {}
 	update(mut app, '.')
+}
+
+pub fn add_current_to_bookmarks(mut app App) {
+	current_entry := entry(app.current_dir)
+	if current_entry !in app.bookmarks {
+		app.bookmarks << current_entry
+	}
 }
 
 pub fn move_to(mut app App) {
