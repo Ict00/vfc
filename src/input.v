@@ -32,6 +32,15 @@ pub fn event(e &tui.Event, x voidptr) {
 			.m {
 				move(mut app)
 			}
+			.e {
+				move_to(mut app)
+			}
+			.f {
+				filter_search(mut app)
+			}
+			.x {
+				jump_to_entry(mut app)
+			}
 			.left_square_bracket {
 				start_range(mut app)
 			}

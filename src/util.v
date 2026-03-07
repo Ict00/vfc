@@ -45,6 +45,25 @@ pub fn update(mut app App, path string) {
 	}
 }
 
+pub fn update_change(mut app App, path string) {
+	if !(os.exists(path) && os.is_dir(path)) {
+		return
+	}
+
+	app.selection = NoSelection{}
+	app.current_dir = os.norm_path(os.abs_path(path))
+	os.chdir(app.current_dir) or {}
+	app.entries = collect(app.current_dir, app.filter)
+	sort(mut app.entries)
+
+	if app.cursor_index >= app.entries.len {
+		app.cursor_index = app.entries.len - 1
+	}
+	if app.page > app.entries.len / page_size(app) {
+		app.page = 0
+	}
+}
+
 pub fn get_input(mut app App, prompt string) string {
 	app.tui.set_cursor_position(0, app.tui.window_height)
 	app.tui.flush()

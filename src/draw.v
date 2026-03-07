@@ -1,6 +1,5 @@
 module main
 
-import os
 import term.ui as tui
 
 pub fn draw_prefix(mut app App, entry Entry, current_index int, b int) {

@@ -52,6 +52,31 @@ pub fn process(mut app App, has_output bool) {
 	update(mut app, '.')
 }
 
+pub fn move_to(mut app App) {
+	go_dir := get_input(mut app, '> ')
+	update_change(mut app, go_dir)
+}
+
+pub fn filter_search(mut app App) {
+	expr := get_input(mut app, '> ')
+
+	app.entries = app.entries.filter(fn [expr] (it Entry) bool {
+		return matches(expr, it.base) || it.base == '..' || it.base == '.'
+	})
+}
+
+pub fn jump_to_entry(mut app App) {
+	expr := get_input(mut app, '> ')
+
+	for i, entry in app.entries {
+		if matches(expr, entry.base) {
+			app.cursor_index = i
+			app.page = i / page_size(app)
+			break
+		}
+	}
+}
+
 pub fn move(mut app App) {
 	if app.action_list.len == 0 {
 		return
