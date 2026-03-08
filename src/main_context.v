@@ -96,7 +96,7 @@ pub fn (mut c MainContext) input(e &tui.Event, mut app App) {
 			.n {
 				rename(mut app)
 			}
-			.w {
+			.w, .up {
 				move_up(mut app)
 			}
 			.k {
@@ -105,16 +105,13 @@ pub fn (mut c MainContext) input(e &tui.Event, mut app App) {
 			.l {
 				next_page(mut app)
 			}
-			.s {
+			.s, .down {
 				move_down(mut app)
 			}
 			.i {
 				add_current(mut app)
 			}
-			.enter {
-				go_next_dir(mut app)
-			}
-			.d {
+			.enter, .d {
 				go_next_dir(mut app)
 			}
 			.a {

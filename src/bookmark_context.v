@@ -60,10 +60,10 @@ pub fn (mut ctx BookmarkContext) input(e &tui.Event, mut app App) {
 
 	if e.typ == .key_down {
 		match e.code {
-			.w {
+			.w, .up {
 				up(mut app, mut ctx)
 			}
-			.s {
+			.s, .down {
 				down(mut app, mut ctx)
 			}
 			.enter, .d {
