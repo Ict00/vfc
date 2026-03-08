@@ -111,10 +111,10 @@ pub fn (mut c MainContext) input(e &tui.Event, mut app App) {
 			.i {
 				add_current(mut app)
 			}
-			.enter, .d {
+			.enter, .d, .right {
 				go_next_dir(mut app)
 			}
-			.a {
+			.a, .left {
 				go_back(mut app)
 			}
 			.u {

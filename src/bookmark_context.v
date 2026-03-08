@@ -66,7 +66,7 @@ pub fn (mut ctx BookmarkContext) input(e &tui.Event, mut app App) {
 			.s, .down {
 				down(mut app, mut ctx)
 			}
-			.enter, .d {
+			.enter, .d, .right {
 				goto_bookmark(mut app, mut ctx)
 			}
 			.r {

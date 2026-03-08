@@ -23,10 +23,10 @@ fn input(e &tui.Event, x voidptr) {
 	mut app := unsafe { &App(x) }
 
 	match e.code {
-		.f1 {
+		.f1, ._1 {
 			app.ctx = MainContext{}
 		}
-		.f2 {
+		.f2, ._2 {
 			app.ctx = BookmarkContext{}
 		}
 		.q {
