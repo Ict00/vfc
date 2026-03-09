@@ -1,6 +1,5 @@
 module main
 
-import os
 import readline
 
 pub struct Script {

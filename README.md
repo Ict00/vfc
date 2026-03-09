@@ -62,7 +62,7 @@ Bookmarks are a convenient way to quickly navigate to frequently accessed direct
 Using scripts you can automate some actions. For example, you can create a script that will automatically `make` all the selected directories:
 ```bash
 cd {}
-make .
+make
 ```
 As you may've noticed, here `{}` is used. It's a placeholder that will be replaced with the path of the entry when the script is executed. You can use it multiple times in the script, and it will be replaced with the same path.
 So basically if you have `a`, `b` and `c` directories in your action list, they'll be passed to the script one by one, and the script will be executed for each of them. So in this case the script will be executed three times: once for `a`, once for `b` and once for `c`.
