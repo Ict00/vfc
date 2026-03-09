@@ -133,3 +133,8 @@ pub fn matches(expr string, checked string) bool {
 
 	return ei == expr.len
 }
+
+pub fn system(cmd string) int {
+	c_cmd := cmd.str
+	return unsafe { C.system(c_cmd) }
+}

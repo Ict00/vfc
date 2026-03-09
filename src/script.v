@@ -17,14 +17,13 @@ pub fn (script Script) use(mut app App) {
 			escaped_entry := "\"${entry.path.replace('"', '\\"')}\""
 
 			execute := script.scenario.replace('@{}', joined_list).replace('{}', escaped_entry)
-			res := os.execute(execute)
-			println(res.output)
+			system(execute)
 		}
 	} else {
-		println(os.execute(script.scenario).output)
+		system(script.scenario)
 	}
 
-	readline.read_line('Press ENTER to return...') or {}
+	readline.read_line('\nPress ENTER to return...') or {}
 
 	app.action_list.clear()
 	update(mut app, '.')
