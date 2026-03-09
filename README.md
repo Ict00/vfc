@@ -31,6 +31,8 @@ of original [**FSC**](https://github.com/Ict00/fsc)
 | **V**            | View settings. `H`/`h` to hide/show all the hidden (starting with `.`) files; `D`/`d` to hide/show all the directories; `F`/`f` to hide/show all the files                                                                              |
 | **;**            | Run a command                                                                                                                                                                                                                           |
 | **Q**/**Escape** | Exit the app                                                                                                                                                                                                                            |
+| **F3**           | Show scripts                                                                                                                                                                                                                            |
+
 ### Patterns
 Patterns are pretty easy to understand. You can use `*` to match any sequence of characters, and `,` to match any single character. For example, `*.txt` will match all files with the `.txt` extension, while `file,.txt` will match files like `file1.txt`, `fileA.txt`, but not `file10.txt`.
 
@@ -54,6 +56,27 @@ Bookmarks are a convenient way to quickly navigate to frequently accessed direct
 | **F2**          | Show bookmarks list      |
 | **F1**          | Hide bookmarks list      |
 | **R**           | Remove selected bookmark |
+
+### Scripts
+
+Using scripts you can automate some actions. For example, you can create a script that will automatically `make` all the selected directories:
+```bash
+cd {}
+make .
+```
+As you may've noticed, here `{}` is used. It's a placeholder that will be replaced with the path of the entry when the script is executed. You can use it multiple times in the script, and it will be replaced with the same path.
+So basically if you have `a`, `b` and `c` directories in your action list, they'll be passed to the script one by one, and the script will be executed for each of them. So in this case the script will be executed three times: once for `a`, once for `b` and once for `c`.
+
+Also, there's another placeholder, `@{}`. It will be replaced with all the entries in the action list at once, separated by space. So if you have `a`, `b` and `c` directories in your action list, and you use `@{}` in your script, it will be replaced with `"a b c"`.
+
+**Scripts controls**
+
+| Key             | Action              |
+|-----------------|---------------------|
+| **W**/**S**     | Move cursor up/down |
+| **D**/**Enter** | Run selected script |
+| **F3**          | Show scripts list   |
+| **F1**          | Hide scripts list   |
 
 ### Colors
 You may notice that on the right side of the screen there are some colors. They represent the type of the entry:

@@ -10,6 +10,7 @@ pub mut:
 	selection        Selection      = NoSelection{}
 	action_list      []Entry        = []Entry{}
 	bookmarks        []Entry        = []Entry{}
+	scripts          []Script       = []Script{}
 	filter           CollectFilter  = CollectFilter{}
 	entries          []Entry        = []Entry{}
 	ctx              ControlContext = MainContext{}
@@ -28,6 +29,9 @@ fn input(e &tui.Event, x voidptr) {
 		}
 		.f2, ._2 {
 			app.ctx = BookmarkContext{}
+		}
+		.f3, ._3 {
+			app.ctx = ScriptContext{}
 		}
 		.q {
 			exit(0)
@@ -52,6 +56,26 @@ fn main() {
 	app.current_dir = os.getwd()
 	app.entries = collect(app.current_dir, app.filter)
 	sort(mut app.entries)
+
+	path := os.config_dir() or { '' }
+
+	if path != '' {
+		config_dir := os.join_path(path, 'vfc')
+		if !(os.exists(config_dir) && os.is_dir(config_dir)) {
+			os.mkdir(config_dir) or {}
+		}
+
+		for i in os.ls(config_dir) or { [] } {
+			if i.ends_with('.sh') {
+				script_path := os.join_path(config_dir, i)
+				script := os.read_file(script_path) or { '' }
+				app.scripts << Script{
+					name:     i.split('.')[0]
+					scenario: script
+				}
+			}
+		}
+	}
 
 	app.tui = tui.init(
 		user_data:   app

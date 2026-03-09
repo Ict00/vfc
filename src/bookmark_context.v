@@ -61,10 +61,10 @@ pub fn (mut ctx BookmarkContext) input(e &tui.Event, mut app App) {
 	if e.typ == .key_down {
 		match e.code {
 			.w, .up {
-				up(mut app, mut ctx)
+				bookmark_up(mut app, mut ctx)
 			}
 			.s, .down {
-				down(mut app, mut ctx)
+				bookmark_down(mut app, mut ctx)
 			}
 			.enter, .d, .right {
 				goto_bookmark(mut app, mut ctx)
@@ -81,9 +81,9 @@ pub fn (mut ctx BookmarkContext) input(e &tui.Event, mut app App) {
 	}
 	if e.typ == .mouse_scroll {
 		if e.direction == .up {
-			up(mut app, mut ctx)
+			bookmark_up(mut app, mut ctx)
 		} else if e.direction == .down {
-			down(mut app, mut ctx)
+			bookmark_down(mut app, mut ctx)
 		}
 	}
 	if e.typ == .mouse_down {
@@ -102,7 +102,7 @@ fn goto_bookmark(mut app App, mut ctx BookmarkContext) {
 	}
 }
 
-fn up(mut app App, mut ctx BookmarkContext) {
+fn bookmark_up(mut app App, mut ctx BookmarkContext) {
 	ctx.cursor_index -= 1
 	if ctx.cursor_index < 0 {
 		ctx.cursor_index = app.bookmarks.len - 1
@@ -114,7 +114,7 @@ fn up(mut app App, mut ctx BookmarkContext) {
 	}
 }
 
-fn down(mut app App, mut ctx BookmarkContext) {
+fn bookmark_down(mut app App, mut ctx BookmarkContext) {
 	ctx.cursor_index += 1
 	if ctx.cursor_index >= app.bookmarks.len {
 		ctx.cursor_index = 0
